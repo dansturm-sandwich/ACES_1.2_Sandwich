@@ -9,6 +9,7 @@ description: An ACES config generated from python
 
 roles:
   _alexa: Input - ARRI - V3 LogC (EI800) - Wide Gamut
+  _alexa_v4: Input - ARRI - LogC4
   _sony: Input - Sony - S-Log3 - Venice S-Gamut3.Cine
   _red: Input - RED - REDLog3G10 - REDWideGamutRGB
   sRGB: Output - sRGB
@@ -21,6 +22,7 @@ roles:
 displays:
   ACES:
     - !<View> {name: Arri Alexa, colorspace: AlexaViewer}
+    - !<View> {name: Arri Alexa V4, colorspace: AlexaViewerV4}
     - !<View> {name: Sony Venice, colorspace: SonyViewer}
     - !<View> {name: Red WLG, colorspace: RedViewer}
     - !<View> {name: sRGB, colorspace: Output - sRGB}
@@ -51,7 +53,7 @@ displays:
     - !<View> {name: Log, colorspace: Input - ADX - ADX10}
 
 active_displays: [ACES]
-active_views: [Arri Alexa, Sony Venice, Red WLG, sRGB, P3-DCI D60 simulation, Rec.709, Raw]
+active_views: [Arri Alexa, Arri Alexa V4, Sony Venice, Red WLG, sRGB, P3-DCI D60 simulation, Rec.709, Raw]
 
 colorspaces:
   - !<ColorSpace>
@@ -4970,11 +4972,30 @@ colorspaces:
     name: AlexaViewer
     family: Viewer
     description: |
-      Alexa Log C
+      Alexa LogC V3
     from_reference: !<GroupTransform>
       children:
         - !<ColorSpaceTransform> {src: ACES - ACES2065-1, dst: Input - ARRI - V3 LogC (EI800) - Wide Gamut}
         - !<FileTransform> {src: ARRI_LogC2Video_709_davinci3d_33.cube, interpolation: linear}
+
+  - !<ColorSpace>
+    name: Input - ARRI - LogC4
+    family: Input/ARRI
+    description: |
+      Alexa LogC V4
+    to_reference: !<GroupTransform>
+      children:
+        - !<FileTransform> {src: arrilogc4.spi1d, interpolation: linear}
+
+  - !<ColorSpace>
+    name: AlexaViewerV4
+    family: Viewer
+    description: |
+      Alexa LogC V4 Viewer
+    from_reference: !<GroupTransform>
+      children:
+        - !<FileTransform> {src: arrilogc4.spi1d, interpolation: linear, direction: inverse}
+        - !<FileTransform> {src: ARRI_LogC4-to-Gamma24_Rec709-D65_v1-33.cube, interpolation: linear}
 
   - !<ColorSpace>
     name: SonyViewer
